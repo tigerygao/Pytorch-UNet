@@ -7,6 +7,7 @@ import torch
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
 from torch import optim
+import matplotlib as plt
 
 from eval import eval_net
 from unet import UNet
@@ -51,7 +52,7 @@ def train_net(net,
 
     criterion = nn.BCELoss()
 
-    train_loss = []
+    train_losses = []
     val_dices = []
 
     for epoch in range(epochs):
@@ -91,7 +92,7 @@ def train_net(net,
             optimizer.step()
 
         print('Epoch finished ! Loss: {}'.format(epoch_loss))
-        train_loss.append(epoch_loss)
+        train_losses.append(epoch_loss)
 
         if 1:
             val_dice = eval_net(net, val, gpu)
@@ -103,6 +104,13 @@ def train_net(net,
                        dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
             print('Checkpoint {} saved !'.format(epoch + 1))
 
+    fig, axes = plt.subplots(1, 4, figsize=(13,4))
+    # plot the losses and acc
+    plt.title(args.name)
+    axes[0].plot(train_losses)
+    axes[0].set_title("Train Loss")
+    axes[1].plot(val_dices)
+    axes[1].set_title("Val Dice")
 
 
 def get_args():
