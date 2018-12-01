@@ -52,7 +52,7 @@ def split_train_val(dataset, val_percent=0.05):
 
 
 def normalize(x):
-    return x / 255
+    return x / 4096
 
 def merge_masks(img1, img2, full_w):
     h = img1.shape[0]
