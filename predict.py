@@ -27,6 +27,7 @@ def predict_img(net,
     img = resize_and_crop(full_img, scale=scale_factor)
     img = normalize(img)
 
+    img = np.expand_dims(img, axis=2)
     left_square, right_square = split_img_into_squares(img)
 
     left_square = hwc_to_chw(left_square)
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     in_files = args.input
     out_files = get_output_filenames(args)
 
-    net = UNet(n_channels=3, n_classes=1)
+    net = UNet(n_channels=1, n_classes=1)
 
     print("Loading model {}".format(args.model))
 
