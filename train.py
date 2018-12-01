@@ -63,6 +63,7 @@ def train_net(net,
 
         for i, b in enumerate(batch(train, batch_size)):
             imgs = np.array([i[0] for i in b]).astype(np.float32)
+            imgs = np.expand_dims(imgs, axis=1)
             true_masks = np.array([i[1] for i in b])
 
             imgs = torch.from_numpy(imgs)
@@ -86,12 +87,13 @@ def train_net(net,
             loss.backward()
             optimizer.step()
 
-        print('Epoch finished ! Loss: {}'.format(epoch_loss / i))
+        print('Epoch finished ! Loss: {}'.format(epoch_loss))
 
+        '''
         if 1:
             val_dice = eval_net(net, val, gpu)
             print('Validation Dice Coeff: {}'.format(val_dice))
-
+        '''
         if save_cp:
             torch.save(net.state_dict(),
                        dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
@@ -120,7 +122,7 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
 
-    net = UNet(n_channels=3, n_classes=1)
+    net = UNet(n_channels=1, n_classes=1)
 
     if args.load:
         net.load_state_dict(torch.load(args.load))

@@ -46,7 +46,7 @@ def batch(iterable, batch_size):
 def split_train_val(dataset, val_percent=0.05):
     dataset = list(dataset)
     length = len(dataset)
-    n = int(length * val_percent)
+    n = int(length * val_percent + 1)
     random.shuffle(dataset)
     return {'train': dataset[:-n], 'val': dataset[-n:]}
 
