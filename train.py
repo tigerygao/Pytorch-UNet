@@ -51,6 +51,9 @@ def train_net(net,
 
     criterion = nn.BCELoss()
 
+    train_loss = []
+    val_dices = []
+
     for epoch in range(epochs):
         print('Starting epoch {}/{}.'.format(epoch + 1, epochs))
         net.train()
@@ -88,12 +91,13 @@ def train_net(net,
             optimizer.step()
 
         print('Epoch finished ! Loss: {}'.format(epoch_loss))
+        train_loss.append(epoch_loss)
 
-        '''
         if 1:
             val_dice = eval_net(net, val, gpu)
             print('Validation Dice Coeff: {}'.format(val_dice))
-        '''
+        val_dices.append(val_dice)
+
         if save_cp:
             torch.save(net.state_dict(),
                        dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
